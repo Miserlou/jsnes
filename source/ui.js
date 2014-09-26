@@ -213,6 +213,9 @@ if (typeof jQuery !== 'undefined') {
                         case "LEFT_BOTTOM_SHOULDER":
                             self.nes.keyboard.setKey(90, 0x41);
                             break;
+                        case "START_FORWARD":
+                            self.nes.keyboard.setKey(13, 0x41);
+                            break;
                     }
                 });
 
@@ -232,6 +235,9 @@ if (typeof jQuery !== 'undefined') {
                             break;
                         case "LEFT_BOTTOM_SHOULDER":
                             self.nes.keyboard.setKey(90, 0x40);
+                            break;
+                        case "START_FORWARD":
+                            self.nes.keyboard.setKey(13, 0x40);
                             break;
                     }
                 });
