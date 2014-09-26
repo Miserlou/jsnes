@@ -167,6 +167,129 @@ if (typeof jQuery !== 'undefined') {
                     bind('keypress', function(evt) {
                         self.nes.keyboard.keyPress(evt);
                     });
+
+                /*
+                 * Hack in the Gamepad
+                 */
+
+                $(document).ready(function() {
+
+                // Attach it to the window so it can be inspected at the console.
+                window.gamepad = new Gamepad();
+
+                console.log(gamepad);
+
+                gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
+                    // a new gamepad connected
+
+                    console.log("connected!");
+                    console.log(device);
+                });
+
+                gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
+                    // gamepad disconnected
+                    console.log("disconnected!");
+                });
+
+                gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
+                    // an unsupported gamepad connected (add new mapping)
+                    console.log("unsupported!");
+                });
+
+                gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
+                    // e.control of gamepad e.gamepad pressed down
+                    console.log("down!");
+                    console.log(e.control);
+                    switch(e.control){
+                        case "FACE_3":
+                            self.nes.keyboard.setKey(88, 0x41);
+                            break;
+                        case "FACE_1":
+                            self.nes.keyboard.setKey(90, 0x41);
+                            break;
+                        case "SELECT_BACK":
+                            self.nes.keyboard.setKey(88, 0x41);
+                            break;
+                        case "LEFT_BOTTOM_SHOULDER":
+                            self.nes.keyboard.setKey(90, 0x41);
+                            break;
+                    }
+                });
+
+                gamepad.bind(Gamepad.Event.BUTTON_UP, function(e) {
+                    // e.control of gamepad e.gamepad released
+                    console.log("up!");
+                    console.log(e.control);
+                    switch(e.control){
+                        case "FACE_3":
+                            self.nes.keyboard.setKey(88, 0x40);
+                            break;
+                        case "FACE_1":
+                            self.nes.keyboard.setKey(90, 0x40);
+                            break;
+                        case "SELECT_BACK":
+                            self.nes.keyboard.setKey(88, 0x40);
+                            break;
+                        case "LEFT_BOTTOM_SHOULDER":
+                            self.nes.keyboard.setKey(90, 0x40);
+                            break;
+                    }
+                });
+
+                gamepad.bind(Gamepad.Event.AXIS_CHANGED, function(e) {
+                    // e.axis changed to value e.value for gamepad e.gamepad
+                    console.log("axis changed!");
+                    switch(e.axis){
+                        case "LEFT_STICK_X":
+                            switch(e.value){
+                                case -1:
+                                    //Left
+                                    self.nes.keyboard.setKey(37, 0x41);
+                                    break;
+                                case 0:
+                                    // Zero
+                                    self.nes.keyboard.setKey(37, 0x40);
+                                    self.nes.keyboard.setKey(39, 0x40);
+                                    break;
+                                case 1:
+                                    // Right
+                                    self.nes.keyboard.setKey(39, 0x41);
+                                    break;
+                            }
+                            break;
+                        case "LEFT_STICK_Y":
+                            switch(e.value){
+                                case -1:
+                                    // Up
+                                    self.nes.keyboard.setKey(38, 0x41);
+                                    break;
+                                case 0:
+                                    // Zero
+                                    self.nes.keyboard.setKey(38, 0x40);
+                                    self.nes.keyboard.setKey(40, 0x40);
+                                    break;
+                                case 1:
+                                    // Down
+                                    self.nes.keyboard.setKey(40, 0x41);
+                                    break;
+                            }
+                            break;
+                    }
+
+                    console.log(e.axis);
+                    console.log(e.value);
+                });
+
+                gamepad.bind(Gamepad.Event.TICK, function(gamepads) {
+                    // gamepads were updated (around 60 times a second)
+                });
+
+
+                if (!gamepad.init()) {
+                    alert('Your browser does not support gamepads, get the latest Google Chrome or Firefox.');
+                }
+
+                });
             
                 /*
                  * Sound
