@@ -1,20 +1,21 @@
+/*global Gamepad JSNES DynamicAudio*/
 /*
-JSNES, based on Jamie Sanders' vNES
-Copyright (C) 2010 Ben Firshman
+ JSNES, based on Jamie Sanders' vNES
+ Copyright (C) 2010 Ben Firshman
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 JSNES.DummyUI = function(nes) {
     this.nes = nes;
@@ -31,21 +32,21 @@ if (typeof jQuery !== 'undefined') {
             var UI = function(nes) {
                 var self = this;
                 self.nes = nes;
-                
+
                 /*
                  * Create UI
                  */
                 self.root = $('<div></div>');
                 self.screen = $('<canvas class="nes-screen" width="256" height="240"></canvas>').appendTo(self.root);
-                
+
                 if (!self.screen[0].getContext) {
                     parent.html("Your browser doesn't support the <code>&lt;canvas&gt;</code> tag. Try Google Chrome, Safari, Opera or Firefox!");
                     return;
                 }
-                
+
                 self.romContainer = $('<div class="nes-roms"></div>').appendTo(self.root);
                 self.romSelect = $('<select></select>').appendTo(self.romContainer);
-                
+
                 self.controls = $('<div class="nes-controls"></div>').appendTo(self.root);
                 self.buttons = {
                     pause: $('<input type="button" value="pause" class="nes-pause" disabled="disabled">').appendTo(self.controls),
@@ -55,14 +56,14 @@ if (typeof jQuery !== 'undefined') {
                 };
                 self.status = $('<p class="nes-status">Booting up...</p>').appendTo(self.root);
                 self.root.appendTo(parent);
-                
+
                 /*
                  * ROM loading
                  */
                 self.romSelect.change(function() {
                     self.loadROM();
                 });
-                
+
                 /*
                  * Buttons
                  */
@@ -77,12 +78,12 @@ if (typeof jQuery !== 'undefined') {
                         self.buttons.pause.attr("value", "pause");
                     }
                 });
-        
+
                 self.buttons.restart.click(function() {
                     self.nes.reloadRom();
                     self.nes.start();
                 });
-        
+
                 self.buttons.sound.click(function() {
                     if (self.nes.opts.emulateSound) {
                         self.nes.opts.emulateSound = false;
@@ -93,7 +94,7 @@ if (typeof jQuery !== 'undefined') {
                         self.buttons.sound.attr("value", "disable sound");
                     }
                 });
-        
+
                 self.zoomed = false;
                 self.buttons.zoom.click(function() {
                     if (self.zoomed) {
@@ -113,7 +114,7 @@ if (typeof jQuery !== 'undefined') {
                         self.zoomed = true;
                     }
                 });
-                
+
                 /*
                  * Lightgun experiments with mouse
                  * (Requires jquery.dimensions.js)
@@ -136,33 +137,33 @@ if (typeof jQuery !== 'undefined') {
                         }, 500);
                     });
                 }
-            
+
                 if (typeof roms != 'undefined') {
                     self.setRoms(roms);
                 }
-            
+
                 /*
                  * Canvas
                  */
                 self.canvasContext = self.screen[0].getContext('2d');
-                
+
                 if (!self.canvasContext.getImageData) {
                     parent.html("Your browser doesn't support writing pixels directly to the <code>&lt;canvas&gt;</code> tag. Try the latest versions of Google Chrome, Safari, Opera or Firefox!");
                     return;
                 }
-                
+
                 self.canvasImageData = self.canvasContext.getImageData(0, 0, 256, 240);
                 self.resetCanvas();
-            
+
                 /*
                  * Keyboard
                  */
                 $(document).
                     bind('keydown', function(evt) {
-                        self.nes.keyboard.keyDown(evt); 
+                        self.nes.keyboard.keyDown(evt);
                     }).
                     bind('keyup', function(evt) {
-                        self.nes.keyboard.keyUp(evt); 
+                        self.nes.keyboard.keyUp(evt);
                     }).
                     bind('keypress', function(evt) {
                         self.nes.keyboard.keyPress(evt);
@@ -174,33 +175,34 @@ if (typeof jQuery !== 'undefined') {
 
                 $(document).ready(function() {
 
-                // Attach it to the window so it can be inspected at the console.
-                window.gamepad = new Gamepad();
+                    // Attach it to the window so it can be inspected at the console.
+                    var gamepad = new Gamepad();
 
-                console.log(gamepad);
+                    console.log(gamepad);
 
-                gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
-                    // a new gamepad connected
+                    gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
+                        // a new gamepad connected
 
-                    console.log("connected!");
-                    console.log(device);
-                });
+                        console.log("connected!");
+                        console.log(device);
+                    });
 
-                gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
-                    // gamepad disconnected
-                    console.log("disconnected!");
-                });
+                    gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
+                        // gamepad disconnected
+                        console.log("disconnected!");
+                    });
 
-                gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
-                    // an unsupported gamepad connected (add new mapping)
-                    console.log("unsupported!");
-                });
+                    gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
+                        // an unsupported gamepad connected (add new mapping)
+                        console.log("unsupported!");
+                    });
 
-                gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
-                    // e.control of gamepad e.gamepad pressed down
-                    console.log("down!");
-                    console.log(e.control);
-                    switch(e.control){
+                    gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
+                        // e.control of gamepad e.gamepad pressed down
+                        console.log("down!");
+                        console.log(e.control);
+                        switch(e.control) {
+                        case "FACE_2":
                         case "FACE_3":
                             self.nes.keyboard.setKey(88, 0x41);
                             break;
@@ -216,14 +218,15 @@ if (typeof jQuery !== 'undefined') {
                         case "START_FORWARD":
                             self.nes.keyboard.setKey(13, 0x41);
                             break;
-                    }
-                });
+                        }
+                    });
 
-                gamepad.bind(Gamepad.Event.BUTTON_UP, function(e) {
-                    // e.control of gamepad e.gamepad released
-                    console.log("up!");
-                    console.log(e.control);
-                    switch(e.control){
+                    gamepad.bind(Gamepad.Event.BUTTON_UP, function(e) {
+                        // e.control of gamepad e.gamepad released
+                        console.log("up!");
+                        console.log(e.control);
+                        switch(e.control){
+                        case "FACE_2":
                         case "FACE_3":
                             self.nes.keyboard.setKey(88, 0x40);
                             break;
@@ -239,73 +242,82 @@ if (typeof jQuery !== 'undefined') {
                         case "START_FORWARD":
                             self.nes.keyboard.setKey(13, 0x40);
                             break;
-                    }
-                });
+                        }
+                    });
 
-                gamepad.bind(Gamepad.Event.AXIS_CHANGED, function(e) {
-                    // e.axis changed to value e.value for gamepad e.gamepad
-                    console.log("axis changed!");
-                    switch(e.axis){
+                    gamepad.bind(Gamepad.Event.AXIS_CHANGED, function(e) {
+                        // e.axis changed to value e.value for gamepad e.gamepad
+                        console.log("axis changed!");
+                        switch(e.axis){
                         case "LEFT_STICK_X":
                             switch(e.value){
-                                case -1:
-                                    //Left
-                                    self.nes.keyboard.setKey(37, 0x41);
-                                    break;
-                                case 0:
-                                    // Zero
-                                    self.nes.keyboard.setKey(37, 0x40);
-                                    self.nes.keyboard.setKey(39, 0x40);
-                                    break;
-                                case 1:
-                                    // Right
-                                    self.nes.keyboard.setKey(39, 0x41);
-                                    break;
+                            case -1:
+                                //Left
+                                self.nes.keyboard.setKey(37, 0x41);
+                                break;
+                            case 0:
+                                // Zero
+                                self.nes.keyboard.setKey(37, 0x40);
+                                self.nes.keyboard.setKey(39, 0x40);
+                                break;
+                            case 1:
+                                // Right
+                                self.nes.keyboard.setKey(39, 0x41);
+                                break;
                             }
                             break;
                         case "LEFT_STICK_Y":
                             switch(e.value){
-                                case -1:
-                                    // Up
-                                    self.nes.keyboard.setKey(38, 0x41);
-                                    break;
-                                case 0:
-                                    // Zero
-                                    self.nes.keyboard.setKey(38, 0x40);
-                                    self.nes.keyboard.setKey(40, 0x40);
-                                    break;
-                                case 1:
-                                    // Down
-                                    self.nes.keyboard.setKey(40, 0x41);
-                                    break;
+                            case -1:
+                                // Up
+                                self.nes.keyboard.setKey(38, 0x41);
+                                break;
+                            case 0:
+                                // Zero
+                                self.nes.keyboard.setKey(38, 0x40);
+                                self.nes.keyboard.setKey(40, 0x40);
+                                break;
+                            case 1:
+                                // Down
+                                self.nes.keyboard.setKey(40, 0x41);
+                                break;
                             }
                             break;
+                        }
+
+                        console.log(e.axis);
+                        console.log(e.value);
+                    });
+
+                    gamepad.bind(Gamepad.Event.TICK, function(gamepads) {
+                        // gamepads were updated (around 60 times a second)
+                    });
+
+
+                    if (!gamepad.init()) {
+                        alert('Your browser does not support gamepads, get the latest Google Chrome or Firefox.');
                     }
 
-                    console.log(e.axis);
-                    console.log(e.value);
                 });
 
-                gamepad.bind(Gamepad.Event.TICK, function(gamepads) {
-                    // gamepads were updated (around 60 times a second)
-                });
-
-
-                if (!gamepad.init()) {
-                    alert('Your browser does not support gamepads, get the latest Google Chrome or Firefox.');
-                }
-
-                });
-            
                 /*
                  * Sound
                  */
                 self.dynamicaudio = new DynamicAudio({
                     swf: nes.opts.swfPath+'dynamicaudio.swf'
                 });
+
+                /*
+                 * Load Mario ROM and begin game
+                 */
+                $(document).ready(function() {
+                    self.romSelect.val('local-roms/Super Mario Bros. (JU) (PRG0) [!].nes');
+                    self.loadROM();
+                });
+
             };
-        
-            UI.prototype = {    
+
+            UI.prototype = {
                 loadROM: function() {
                     var self = this;
                     self.updateStatus("Downloading...");
@@ -327,7 +339,7 @@ if (typeof jQuery !== 'undefined') {
                                     xhr.responseBody
                                 ).toArray();
                                 data = String.fromCharCode.apply(
-                                    undefined, 
+                                    undefined,
                                     charCodes
                                 );
                             }
@@ -340,7 +352,7 @@ if (typeof jQuery !== 'undefined') {
                         }
                     });
                 },
-                
+
                 resetCanvas: function() {
                     this.canvasContext.fillStyle = 'black';
                     // set alpha to opaque
@@ -351,18 +363,18 @@ if (typeof jQuery !== 'undefined') {
                         this.canvasImageData.data[i] = 0xFF;
                     }
                 },
-                
+
                 /*
-                *
-                * nes.ui.screenshot() --> return <img> element :)
-                */
+                 *
+                 * nes.ui.screenshot() --> return <img> element :)
+                 */
                 screenshot: function() {
                     var data = this.screen[0].toDataURL("image/png"),
                         img = new Image();
                     img.src = data;
                     return img;
                 },
-                
+
                 /*
                  * Enable and reset UI elements
                  */
@@ -382,18 +394,18 @@ if (typeof jQuery !== 'undefined') {
                         this.buttons.sound.attr("value", "enable sound");
                     }
                 },
-            
+
                 updateStatus: function(s) {
                     this.status.text(s);
                 },
-        
+
                 setRoms: function(roms) {
                     this.romSelect.children().remove();
                     $("<option>Select a ROM...</option>").appendTo(this.romSelect);
                     for (var groupName in roms) {
                         if (roms.hasOwnProperty(groupName)) {
                             var optgroup = $('<optgroup></optgroup>').
-                                attr("label", groupName);
+                                    attr("label", groupName);
                             for (var i = 0; i < roms[groupName].length; i++) {
                                 $('<option>'+roms[groupName][i][0]+'</option>')
                                     .attr("value", roms[groupName][i][1])
@@ -403,11 +415,11 @@ if (typeof jQuery !== 'undefined') {
                         }
                     }
                 },
-            
+
                 writeAudio: function(samples) {
                     return this.dynamicaudio.writeInt(samples);
                 },
-            
+
                 writeFrame: function(buffer, prevBuffer) {
                     var imageData = this.canvasImageData.data;
                     var pixel, i, j;
@@ -427,7 +439,7 @@ if (typeof jQuery !== 'undefined') {
                     this.canvasContext.putImageData(this.canvasImageData, 0, 0);
                 }
             };
-        
+
             return UI;
         };
     })(jQuery);
