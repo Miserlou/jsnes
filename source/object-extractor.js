@@ -39,6 +39,8 @@
             blocks_per_row = Math.floor(width / block_width),
             blocks_per_column = Math.floor((height - top_offset) / block_height),
             viewer_canvas = document.getElementById('viewer');
+        // blocks_per_row = 2;
+        // blocks_per_column = 1;
 
         $.extend(self, {
             getObjects: function(data) {
@@ -54,25 +56,22 @@
                             g_total = 0,
                             b_total = 0,
                             total = 0;
+                        var tmp_viewer_data = {};
                         for (var y = 0; y < block_width; y++) {
                             for (var x = 0; x < block_width; x++) {
-                                var top = top_offset + block_number_y * block_height + y,
-                                    left = block_number_x * block_width + x;
                                 total = total + 1;
-                                var ctx_offset = (block_number_y * blocks_per_row * block_width * block_height * 4) + (block_number_x * block_width * block_height * 4) + (y * block_width * 4) + (x * 4);
+                                var ctx_offset = ((block_number_y * blocks_per_row + y) * block_width * block_height * 4) + ((block_number_x * block_width + x) * 4);
                                 var r = data[ctx_offset],
                                     g = data[ctx_offset+1],
                                     b = data[ctx_offset+2];
-                                if (x > 0 && block_number_y) {
-                                    // debugger;
-                                }
-                                if (r && r != 0) {
-                                    // debugger;
-                                }
-                                viewer_data[ctx_offset] = r;
-                                viewer_data[ctx_offset + 1] = g;
-                                viewer_data[ctx_offset + 2] = b;
-                                viewer_data[ctx_offset + 3] = 0xFF;
+                                tmp_viewer_data[ctx_offset] = r;
+                                tmp_viewer_data[ctx_offset + 1] = g;
+                                tmp_viewer_data[ctx_offset + 2] = b;
+                                tmp_viewer_data[ctx_offset + 3] = 0xFF;
+                                // viewer_data[ctx_offset] = r;
+                                // viewer_data[ctx_offset + 1] = g;
+                                // viewer_data[ctx_offset + 2] = b;
+                                // viewer_data[ctx_offset + 3] = 0xFF;
                                 r_total += r;
                                 g_total += g;
                                 b_total += b;
@@ -91,6 +90,9 @@
                             }
                         });
                         if (found_type) {
+                            $.each(tmp_viewer_data, function(i) {
+                                viewer_data[parseInt(i, 10)] = parseInt(this, 10);
+                            });
                             objects.push({type: found_type,
                                             x: block_number_x,
                                             y: blocks_per_column - block_number_y})
@@ -99,7 +101,7 @@
                         blocks.push([r_total, g_total, b_total]);
                     }
                 }
-                // viewer_canvas_ctx.putImageData(viewer_canvas_data, 0, 0);
+                viewer_canvas_ctx.putImageData(viewer_canvas_data, 0, 0);
                 return {width: width,
                         height: height,
                         objects: objects};
