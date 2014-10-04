@@ -72,7 +72,7 @@
                                     g = pixels.get(top,left,1),
                                     b = pixels.get(top,left,2);
                                 var offset = (x + y * block_width) * 4;
-                                var ctx_offset = block_number_y * blocks_per_row * block_width * block_height * 4 + block_number_x * block_width * block_height * 4 + y * block_width * 4 + x;
+                                var ctx_offset = 4 * (block_number_y * blocks_per_row * block_width * block_height + block_number_x * block_width * block_height + y * block_width + x);
 
                                 viewer_data[ctx_offset] = r;
                                 viewer_data[ctx_offset + 1] = g;

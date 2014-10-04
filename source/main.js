@@ -1,4 +1,4 @@
-/*global JSNES*/
+/*global JSNES updateBoard*/
 var nes;
 $(function() {
     nes = new JSNES({
@@ -49,9 +49,10 @@ $(function() {
         objectExtractor = $.objectExtractor({width: canvas.width,
                                              height: canvas.height,
                                              objects: objects});
-    setTimeout(function() {
+    setInterval(function() {
         var imageData = canvas_ctx.getImageData(0, 0, canvas.width, canvas.height),
             data = imageData.data;
-        console.log(objectExtractor.getObjects(data));
-    }, 3000);
+        var board = objectExtractor.getObjects(data);
+        updateBoard(board);
+    }, 300);
 });
