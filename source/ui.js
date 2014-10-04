@@ -311,7 +311,7 @@ if (typeof jQuery !== 'undefined') {
                  * Load Mario ROM and begin game
                  */
                 $(document).ready(function() {
-                    self.romSelect.val('local-roms/Super Mario Bros. (JU) (PRG0) [!].nes');
+                    self.romSelect.hide().val('local-roms/Super Mario Bros. (JU) (PRG0) [!].nes');
                     self.loadROM();
                 });
 
