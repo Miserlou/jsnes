@@ -53,6 +53,8 @@ $(function() {
         var imageData = canvas_ctx.getImageData(0, 0, canvas.width, canvas.height),
             data = imageData.data;
         var board = objectExtractor.getObjects(data);
-        updateBoard(board);
+        console.log(board);
+        // updateBoard(board);
+        $('#objects').text(JSON.stringify(board.objects));
     }, 300);
 });
