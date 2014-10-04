@@ -25,21 +25,17 @@ Each of these synths is actually just:
 // Process the extracted objects.
 function updateBoard(board){
 
-	var length = board.length;
+	var length = board['objects'].length;
 	var obj;
 
 	var objects = {'goomba': []};
 
 	for(var i=0; i<length; i++){
-		obj = board[i];
+		obj = board['objects'][i];
 
-		if(obj.length == 0){
-			continue;
-		}
-
-		if(obj[0]['type'] === 'goomba'){
+		if(obj['type'] === 'goomba'){
 			console.log("Goomba on the screen!");
-			objects['goomba'].push(obj[0]);
+			objects['goomba'].push(obj);
 		}
 	}
 
