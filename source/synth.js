@@ -1,46 +1,47 @@
 
 // Dynamic objects are represented as synthesizers. 
-var synths = [];
+var synths = {
+	'goomba': [],
+	'mushroom': [],
+	'turtle': []
+};
 
 /*
 
 Each of these synths is actually just:
 
 {
-
-	'goombas': {
-
-		synth: TimbreJS object
-		last_x: Last location X
-		last_y: Last location Y
-		last_tick: Last time this one was modified
-
+	'goombas': [
+		{
+			synth: TimbreJS object
+			last_x: Last location X
+			last_y: Last location Y
+			last_tick: Last time this one was modified
+		},
 	}
-	
 }
 */
-
 
 // Process the extracted objects.
 function updateBoard(board){
 
-	var length = board.length;
+	var length = board['objects'].length;
 	var obj;
 
-	var objects = {'goombas': []};
+	var objects = {'goomba': []};
 
 	for(var i=0; i<length; i++){
-		obj = board[i];
+		obj = board['objects'][i];
 
-		if(obj['type'] == 'goomba'){
-			objects['goombas'].push(obj);
+		if(obj['type'] === 'goomba'){
+			console.log("Goomba on the screen!");
+			objects['goomba'].push(obj);
 		}
 	}
 
 	updateSynths(objects);
 
 }
-
 
 /* 
 
@@ -68,34 +69,45 @@ function updateSynths(objects){
 	var type;
 
 	for(var key in objects){
-		type = objects[key]; // ex 'goomba'
+		type = key; // ex 'goomba'
+
+		var old_synths_length;
+		if(synths[type] != undefined){
+			old_synths_length = synths[type].length;
+		} else{
+			old_synths_length = 0;
+		};
+		var new_synths_length = objects[type].length;
+
+		console.log("Old Synths: " + old_synths_length);
+		console.log("New Synths: " + new_synths_length);
 
 		// Move the existing synths
-		if(type.length == synths[type].length){
+		if(new_synths_length == old_synths_length){
 			for(var synth in synths[type]){
-
-				console.log("Moving synth to");
 				var closest = getClosest(synth, objects[type]);
-				console.log(closest[0].x + ", " + closest[0].y);
+				moveSynth(synth, closest[0]);
 			}
 		}
 
 		// Move the existing synths, create new synths
-		else if(type.length > synths[type].length){
+		else if(new_synths_length > old_synths_length){
 
 			var unmoved_objects = objects[type];
+
 			for(var synth in synths[type]){
 
-				console.log("Moving synth to");
 				var closest = getClosest(synth, objects[type]);
-				console.log(closest[0].x + ", " + closest[0].y);
-				unmoved_synths.remove(closest[0]);
+				moveSynth(synth, closest[0]);
+
+				var index = unmoved_objects.indexOf(closest[0]);
+				unmoved_objects.splice(index, 1);
 
 			}
 
-			for(var new_synth in unmoved_objects){
-				console.log("Creating new synth for ");
-				console.log(new_synth);
+			for(var new_object in unmoved_objects){
+
+				createSynth(unmoved_objects[new_object]);
 			}
 
 		}
@@ -106,17 +118,17 @@ function updateSynths(objects){
 			var old_synths = synths[type];
 			var new_objects = objects[type];
 
-
 			for(var new_object in new_objects){
 				var closest = getClosest(new_object, synths[type]);
-				console.log("Moving synth");
-				old_synths.remove(closest[0]);
+				moveSynth(closest[0], new_object);
+
+				var index = old_synths.indexOf(closest[0]);
+				old_synths.splice(index, 1);
 
 			}
 
 			for(var delete_me in old_synths){
-				console.log("Deleting synth");
-				console.log(delete_me);
+				deleteSynth(old_synths[delete_me], type);
 			}
 
 		}
@@ -141,4 +153,34 @@ function getClosest(object, list){
 
 	return [closest, dist];
 
+}
+
+function createSynth(new_object){
+	console.log("Creating synth..")
+	var synthHolder = {};
+	var t = T("sin", {freq:880}).play();
+	synthHolder['synth'] = t;
+	synthHolder['x'] = new_object['x'];
+	synthHolder['y'] = new_object['y'];
+
+	console.log(new_object);
+
+	synths[new_object['type']].push(synthHolder);
+}
+
+function deleteSynth(synthHolder, type){
+	console.log("Deleting synth..")
+	console.log(synthHolder);
+
+	var synth = synthHolder['synth'];
+	synth.pause();
+
+	var index = synths[type].indexOf(synthHolder);
+	synths[type].splice(index, 1);
+}
+
+function moveSynth(synthHolder, new_object){
+	// console.log("Moving synth..")
+	// var synth = synthHolder['synth'];
+	//synth.set();
 }
