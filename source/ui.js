@@ -175,14 +175,11 @@ if (typeof jQuery !== 'undefined') {
 
                 $(document).ready(function() {
 
-                    // Attach it to the window so it can be inspected at the console.
-                    var gamepad = new Gamepad();
-
-                    console.log(gamepad);
+                // Attach it to the window so it can be inspected at the console.
+                var gamepad = new Gamepad();
 
                     gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
-                        // a new gamepad connected
-
+                    // a new gamepad connected
                         console.log("connected!");
                         console.log(device);
                     });
@@ -199,8 +196,6 @@ if (typeof jQuery !== 'undefined') {
 
                     gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
                         // e.control of gamepad e.gamepad pressed down
-                        console.log("down!");
-                        console.log(e.control);
                         switch(e.control) {
                         case "FACE_2":
                         case "FACE_3":
@@ -210,10 +205,10 @@ if (typeof jQuery !== 'undefined') {
                             self.nes.keyboard.setKey(90, 0x41);
                             break;
                         case "SELECT_BACK":
-                            self.nes.keyboard.setKey(88, 0x41);
+                            self.nes.keyboard.setKey(90, 0x41);
                             break;
                         case "LEFT_BOTTOM_SHOULDER":
-                            self.nes.keyboard.setKey(90, 0x41);
+                            self.nes.keyboard.setKey(88, 0x41);
                             break;
                         case "START_FORWARD":
                             self.nes.keyboard.setKey(13, 0x41);
@@ -221,10 +216,9 @@ if (typeof jQuery !== 'undefined') {
                         }
                     });
 
+
                     gamepad.bind(Gamepad.Event.BUTTON_UP, function(e) {
                         // e.control of gamepad e.gamepad released
-                        console.log("up!");
-                        console.log(e.control);
                         switch(e.control){
                         case "FACE_2":
                         case "FACE_3":
@@ -234,10 +228,10 @@ if (typeof jQuery !== 'undefined') {
                             self.nes.keyboard.setKey(90, 0x40);
                             break;
                         case "SELECT_BACK":
-                            self.nes.keyboard.setKey(88, 0x40);
+                            self.nes.keyboard.setKey(90, 0x40);
                             break;
                         case "LEFT_BOTTOM_SHOULDER":
-                            self.nes.keyboard.setKey(90, 0x40);
+                            self.nes.keyboard.setKey(88, 0x40);
                             break;
                         case "START_FORWARD":
                             self.nes.keyboard.setKey(13, 0x40);
@@ -245,10 +239,8 @@ if (typeof jQuery !== 'undefined') {
                         }
                     });
 
-                    gamepad.bind(Gamepad.Event.AXIS_CHANGED, function(e) {
-                        // e.axis changed to value e.value for gamepad e.gamepad
-                        console.log("axis changed!");
-                        switch(e.axis){
+                gamepad.bind(Gamepad.Event.AXIS_CHANGED, function(e) {
+                    switch(e.axis){
                         case "LEFT_STICK_X":
                             switch(e.value){
                             case -1:
@@ -284,9 +276,6 @@ if (typeof jQuery !== 'undefined') {
                             }
                             break;
                         }
-
-                        console.log(e.axis);
-                        console.log(e.value);
                     });
 
                     gamepad.bind(Gamepad.Event.TICK, function(gamepads) {
