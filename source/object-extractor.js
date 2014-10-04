@@ -104,7 +104,8 @@
                 viewer_canvas_ctx.putImageData(viewer_canvas_data, 0, 0);
                 return {width: width,
                         height: height,
-                        objects: objects};
+                        objects: objects,
+                        data: viewer_canvas_data};
             }
         });
     };
