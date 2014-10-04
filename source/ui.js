@@ -196,8 +196,6 @@ if (typeof jQuery !== 'undefined') {
 
                     gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
                         // e.control of gamepad e.gamepad pressed down
-                        console.log("down!");
-                        console.log(e.control);
                         switch(e.control) {
                         case "FACE_2":
                         case "FACE_3":
@@ -230,10 +228,10 @@ if (typeof jQuery !== 'undefined') {
                             self.nes.keyboard.setKey(90, 0x40);
                             break;
                         case "SELECT_BACK":
-                            self.nes.keyboard.setKey(88, 0x40);
+                            self.nes.keyboard.setKey(90, 0x40);
                             break;
                         case "LEFT_BOTTOM_SHOULDER":
-                            self.nes.keyboard.setKey(90, 0x40);
+                            self.nes.keyboard.setKey(88, 0x40);
                             break;
                         case "START_FORWARD":
                             self.nes.keyboard.setKey(13, 0x40);
