@@ -1,9 +1,9 @@
 
 // Dynamic objects are represented as synthesizers. 
 var synths = {
-	'goombas': [],
-	'mushrooms': [],
-	'turtles': []
+	'goomba': [],
+	'mushroom': [],
+	'turtle': []
 };
 
 /*
@@ -28,7 +28,7 @@ function updateBoard(board){
 	var length = board.length;
 	var obj;
 
-	var objects = {'goombas': []};
+	var objects = {'goomba': []};
 
 	for(var i=0; i<length; i++){
 		obj = board[i];
@@ -39,7 +39,7 @@ function updateBoard(board){
 
 		if(obj[0]['type'] === 'goomba'){
 			console.log("Goomba on the screen!");
-			objects['goombas'].push(obj);
+			objects['goomba'].push(obj[0]);
 		}
 	}
 
@@ -98,16 +98,20 @@ function updateSynths(objects){
 		else if(new_synths_length > old_synths_length){
 
 			var unmoved_objects = objects[type];
+
 			for(var synth in synths[type]){
 
 				var closest = getClosest(synth, objects[type]);
 				moveSynth(synth, closest[0]);
-				unmoved_synths.remove(closest[0]);
+
+				var index = unmoved_objects.indexOf(closest[0]);
+				unmoved_objects.splice(index, 1);
 
 			}
 
-			for(var new_synth in unmoved_objects){
-				createSynth(new_synth);
+			for(var new_object in unmoved_objects){
+
+				createSynth(unmoved_objects[new_object]);
 			}
 
 		}
@@ -121,12 +125,14 @@ function updateSynths(objects){
 			for(var new_object in new_objects){
 				var closest = getClosest(new_object, synths[type]);
 				moveSynth(closest[0], new_object);
-				old_synths.remove(closest[0]);
+
+				var index = old_synths.indexOf(closest[0]);
+				old_synths.splice(index, 1);
 
 			}
 
 			for(var delete_me in old_synths){
-				deleteSynth(delete_me);
+				deleteSynth(old_synths[delete_me], type);
 			}
 
 		}
@@ -160,19 +166,25 @@ function createSynth(new_object){
 	synthHolder['synth'] = t;
 	synthHolder['x'] = new_object['x'];
 	synthHolder['y'] = new_object['y'];
+
+	console.log(new_object);
+
 	synths[new_object['type']].push(synthHolder);
 }
 
-function deleteSynth(synthHolder){
+function deleteSynth(synthHolder, type){
 	console.log("Deleting synth..")
+	console.log(synthHolder);
+
 	var synth = synthHolder['synth'];
 	synth.pause();
-	var index = synths.indexOf(synthHolder);
-	synths.splice(index, 1);
+
+	var index = synths[type].indexOf(synthHolder);
+	synths[type].splice(index, 1);
 }
 
 function moveSynth(synthHolder, new_object){
-	console.log("Moving synth..")
-	var synth = synthHolder['synth'];
+	// console.log("Moving synth..")
+	// var synth = synthHolder['synth'];
 	//synth.set();
 }
