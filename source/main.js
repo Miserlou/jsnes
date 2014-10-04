@@ -45,8 +45,13 @@ $(function() {
                    'star_flag': [ 159.09375, 164.609375, 214.703125 ],
                    'turtle': [ 104.703125, 162.921875, 154.984375 ] };
     var canvas = $('.nes-screen')[0],
+        canvas_ctx = canvas.getContext('2d'),
         objectExtractor = $.objectExtractor({width: canvas.width,
                                              height: canvas.height,
                                              objects: objects});
-    setTimeout()
+    setTimeout(function() {
+        var imageData = canvas_ctx.getImageData(0, 0, canvas.width, canvas.height),
+            data = imageData.data;
+        console.log(objectExtractor.getObjects(data));
+    }, 3000);
 });

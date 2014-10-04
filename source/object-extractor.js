@@ -1,4 +1,4 @@
-/* global $*/
+/*global $ ndarray PNGlib */
 /*
  Object Extractor - converts a list of pixels in RGBA format into GameJSON
  params:
@@ -45,22 +45,24 @@
             block_height = config.block_height,
             top_offset = config.top_offset,
             blocks_per_row = Math.floor(width / block_width),
-            blocks_per_column = Math.floor((height - top_offset) / block_height);
+            blocks_per_column = Math.floor((height - top_offset) / block_height),
+            viewer_canvas = document.getElementById('viewer');
 
         $.extend(self, {
-            getObjects: function(pixels) {
-                // pixels in RGBA format
-                var blocks = [],
+            getObjects: function(data) {
+                // data is list of RGBA elements
+                var pixels = ndarray(new Uint8Array(data), [width, height, 4], [4, 4*width, 1], 0),
+                    blocks = [],
                     notes = [];
-
+                var viewer_canvas_ctx = viewer_canvas.getContext('2d'),
+                    viewer_canvas_data = viewer_canvas_ctx.createImageData(width, height),
+                    viewer_data = viewer_canvas_data.data;
                 for (var block_number_y = 0; block_number_y < blocks_per_column; block_number_y++) {
                     for (var block_number_x = 0; block_number_x < blocks_per_row; block_number_x++) {
                         var r_total = 0,
                             g_total = 0,
                             b_total = 0,
                             total = 0;
-                            // png = new PNG({width: block_width,
-                                           // height: block_width});
                         for (var x = 0; x < block_width; x++) {
                             for (var y = 0; y < block_width; y++) {
                                 var top = top_offset + block_number_y * block_height + y,
@@ -70,10 +72,12 @@
                                     g = pixels.get(top,left,1),
                                     b = pixels.get(top,left,2);
                                 var offset = (x + y * block_width) * 4;
-                                // png.data[offset] = r;
-                                // png.data[offset + 1] = g;
-                                // png.data[offset + 2] = b;
-                                // png.data[offset + 3] = 0xFF;
+                                var ctx_offset = block_number_y * blocks_per_row * block_width * block_height * 4 + block_number_x * block_width * block_height * 4 + y * block_width * 4 + x;
+
+                                viewer_data[ctx_offset] = r;
+                                viewer_data[ctx_offset + 1] = g;
+                                viewer_data[ctx_offset + 2] = b;
+                                viewer_data[ctx_offset + 3] = 0xFF;
                                 r_total += r;
                                 g_total += g;
                                 b_total += b;
@@ -103,6 +107,7 @@
                         blocks.push([r_total, g_total, b_total]);
                     }
                 }
+                viewer_canvas_ctx.putImageData(viewer_canvas_data, 0, 0);
                 return notes;
             }
         });
