@@ -8,8 +8,9 @@
 <body>
     <h1>NETFLIX FOR CATS</h1>
 
-    <div id="emulator"></div>
-    <canvas id="viewer"></canvas>
+    <div id="emulator" style="float: left;"></div>
+    <canvas id="viewer" width="256" height="240" style="float: left;"></canvas>
+    <div id="objects" style="float: left;"></div>
 
     <h2>Controls</h2>
     <table id="controls">
@@ -76,7 +77,6 @@
     <script src="source/board.js" type="text/javascript" charset="utf-8"></script>
     <script src="source/synth.js" type="text/javascript" charset="utf-8"></script>
     <script src="source/object-extractor.js" type="text/javascript" charset="utf-8"></script>
-    <script src="source/ndarray.js" type="text/javascript" charset="utf-8"></script>
     <script src="source/main.js" type="text/javascript" charset="utf-8"></script>
     <!--[if IE]>
         <script type="text/vbscript" src="source/jsnes-ie-hacks.vbscript"></script>
