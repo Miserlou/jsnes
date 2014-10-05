@@ -43,8 +43,8 @@ function updateBoard(board){
 			objects['goomba'].push(obj);
 		}
 		if(obj['type'] === 'mario'){
-			console.log("mario!");
-			console.log(obj);
+			mario['x'] = obj['x'];
+			mario['y'] = obj['y'];
 		}
 	}
 
@@ -89,8 +89,12 @@ function updateSynths(objects){
 		var new_synths_length = objects[type].length;
 
 		// Move the existing synths
+
 		if(new_synths_length == old_synths_length){
-			for(var synth in synths[type]){
+
+			for(var c_synth in synths[type]){
+				var synth = synths[type][c_synth];
+
 				var closest = getClosest(synth, objects[type]);
 				moveSynth(synth, closest[0]);
 			}
@@ -101,7 +105,8 @@ function updateSynths(objects){
 
 			var unmoved_objects = objects[type];
 
-			for(var synth in synths[type]){
+			for(var c_synth in synths[type]){
+				var synth = synths[type][c_synth];
 
 				var closest = getClosest(synth, objects[type]);
 				moveSynth(synth, closest[0]);
@@ -112,7 +117,6 @@ function updateSynths(objects){
 			}
 
 			for(var new_object in unmoved_objects){
-
 				createSynth(unmoved_objects[new_object]);
 			}
 
@@ -124,7 +128,14 @@ function updateSynths(objects){
 			var old_synths = synths[type];
 			var new_objects = objects[type];
 
+			console.log("new objects");
+			console.log(new_objects);
+
 			for(var new_object in new_objects){
+
+				console.log("new object");
+				console.log(new_object);
+
 				var closest = getClosest(new_object, synths[type]);
 				moveSynth(closest[0], new_object);
 
@@ -133,8 +144,9 @@ function updateSynths(objects){
 
 			}
 
-			for(var delete_me in old_synths){
-				deleteSynth(old_synths[delete_me], type);
+			for(var c_delete_me in old_synths){
+				var delete_me = old_synths[c_delete_me];
+				deleteSynth(delete_me, type);
 			}
 
 		}
@@ -148,7 +160,10 @@ function getClosest(object, list){
 	var dist = 9999999;
 	var t_dist;
 	var closest;
-	for (var i in list) {
+	for (var x in list) {
+
+		i = list[x];
+		console.log(i);
 
 		t_dist = Math.abs(object.x - i.x) + Math.abs(object.y - i.y);
 		if (t_dist < dist){
@@ -156,6 +171,9 @@ function getClosest(object, list){
 			dist = t_dist;
 		} 
 	}
+
+	console.log("Closest is..");
+	console.log(closest);
 
 	return [closest, dist];
 
@@ -185,12 +203,19 @@ function deleteSynth(synthHolder, type){
 }
 
 function moveSynth(synthHolder, new_object){
-	// console.log("Moving synth..")
+	console.log("Moving synth..")
 	// var synth = synthHolder['synth'];
+
+
+	// console.log(new_object);
+	// var dist = distanceFromMario(new_object);
+
 	//synth.set();
 }
 
 function distanceFromMario(object){
+
+	console.log(mario);
 
 	var dist = Math.abs(mario['x'] - object['x']) + Math.abs(mario['y'] - object['y']);
 	console.log(dist);
