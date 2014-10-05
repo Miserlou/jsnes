@@ -37,6 +37,7 @@ $(function() {
         instruments: instruments,
         callback: function() {
             midi_started = true;
+            $('#loading').text("Loaded!");
             window.MIDI = MIDI;
             MIDI.setVolume(0, 127);
 
