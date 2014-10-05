@@ -3,6 +3,7 @@
 var synths = {
 	'goomba': [],
 	'mushroom': [],
+    'brick': [],
 	'turtle': []
 };
 
@@ -34,14 +35,16 @@ function updateBoard(board){
 	var length = board['objects'].length;
 	var obj;
 
-	var objects = {'goomba': []};
+	var objects = {'goomba': [],
+                   'brick': []};
 
 	for(var i=0; i<length; i++){
 		obj = board['objects'][i];
 
-		if(obj['type'] === 'goomba'){
+		if(obj['type'] === 'goomba' ||
+           obj['type'] === 'brick'){
 			//console.log("Goomba on the screen!");
-			objects['goomba'].push(obj);
+			objects[obj['type']].push(obj);
 		}
 		if(obj['type'] === 'mario'){
             if (!started && obj.x === 6 && obj.y === 7) {
@@ -51,7 +54,6 @@ function updateBoard(board){
 			mario['y'] = obj['y'];
 		}
 	}
-
 	updateSynths(objects);
 
 }
@@ -205,11 +207,16 @@ function makeParams(new_object) {
         wave,
         freq,
         mul;
+    var dist = distanceFromMario(new_object);
     if (type === 'goomba') {
         wave = 'sin';
+        freq = T('pulse', {add: ((10 - dist) * 110), freq: (10-dist), mul: 20}).kr();
+    } else if (type === 'brick') {
+        wave = 'sin';
+        freq = ((10 - dist) * 40);
+        mul = 0.1;
     }
-    var dist = distanceFromMario(new_object);
-    freq = T('pulse', {add: ((10 - dist) * 110), freq: (10-dist), mul: 20}).kr();
+
     return {wave: wave,
             freq: freq,
             mul: 1 - (Math.abs(y - mario.y) / 8.0)};
@@ -243,7 +250,6 @@ function moveSynth(synthHolder, new_object){
 	console.log("Moving synth..")
 	var t = synthHolder['synth'];
     var params = makeParams(new_object);
-    debugger;
 	t.set({freq: params.freq, mul: params.mul });
 }
 
