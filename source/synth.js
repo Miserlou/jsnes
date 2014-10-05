@@ -1,11 +1,12 @@
-
-// Dynamic objects are represented as synthesizers. 
+/*global T*/
+// Dynamic objects are represented as synthesizers.
 var synths = {
 	'goomba': [],
 	'mushroom': [],
 	'turtle': []
 };
 
+var started = false;
 var mario = {'x': 0, 'y': 0};
 
 /*
@@ -42,17 +43,20 @@ function updateBoard(board){
 			//console.log("Goomba on the screen!");
 			objects['goomba'].push(obj);
 		}
-		// if(obj['type'] === 'mario'){
-		// 	mario['x'] = obj['x'];
-		// 	mario['y'] = obj['y'];
-		// }
+		if(obj['type'] === 'mario'){
+            if (!started && obj.x === 6 && obj.y === 7) {
+                started = true;
+            }
+			mario['x'] = obj['x'];
+			mario['y'] = obj['y'];
+		}
 	}
 
 	updateSynths(objects);
 
 }
 
-/* 
+/*
 
 Create or modify the relevant synths
 
@@ -78,6 +82,9 @@ function updateSynths(objects){
 	var type;
 
 	for(var key in objects){
+        if (!started) {
+            return;
+        }
 		type = key; // ex 'goomba'
 
 		var old_synths_length;
@@ -181,7 +188,7 @@ function getClosest(object, list){
 		if (t_dist < dist){
 			closest = i;
 			dist = t_dist;
-		} 
+		}
 	}
 
 	console.log("Closest is..");
@@ -191,12 +198,28 @@ function getClosest(object, list){
 
 }
 
-function createSynth(new_object){
+function makeParams(new_object) {
+    var type = new_object.type,
+        x = new_object.x,
+        y = new_object.y,
+        wave,
+        freq,
+        mul;
+    if (type === 'goomba') {
+        wave = 'sin';
+    }
+    var dist = distanceFromMario(new_object);
+    freq = T('pulse', {add: ((10 - dist) * 110), freq: (10-dist), mul: 20}).kr();
+    return {wave: wave,
+            freq: freq,
+            mul: 1 - (Math.abs(y - mario.y) / 8.0)};
+}
 
+function createSynth(new_object){
 	var synthHolder = {};
 
-	var dist = distanceFromMario(new_object);
-	var t = T("sin", {freq: ((10 - dist) * 110) }).play();
+	var params = makeParams(new_object);
+	var t = T(params.wave, {freq: params.freq, mul: params.mul }).play();
 	synthHolder['synth'] = t;
 	synthHolder['x'] = new_object['x'];
 	synthHolder['y'] = new_object['y'];
@@ -218,17 +241,14 @@ function deleteSynth(synthHolder, type){
 
 function moveSynth(synthHolder, new_object){
 	console.log("Moving synth..")
-	// var synth = synthHolder['synth'];
-
-
-	// console.log(new_object);
-	// var dist = distanceFromMario(new_object);
-
-	//synth.set();
+	var t = synthHolder['synth'];
+    var params = makeParams(new_object);
+    debugger;
+	t.set({freq: params.freq, mul: params.mul });
 }
 
 function distanceFromMario(object){
-	var dist = Math.abs(mario['x'] - object['x']) + Math.abs(mario['y'] - object['y']);
+	var dist = Math.sqrt(Math.pow(mario['x'] - object['x'], 2) + Math.pow(mario['y'] - object['y'], 2));
 	return dist;
 
 }
