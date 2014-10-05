@@ -42,10 +42,10 @@ function updateBoard(board){
 			//console.log("Goomba on the screen!");
 			objects['goomba'].push(obj);
 		}
-		if(obj['type'] === 'mario'){
-			mario['x'] = obj['x'];
-			mario['y'] = obj['y'];
-		}
+		// if(obj['type'] === 'mario'){
+		// 	mario['x'] = obj['x'];
+		// 	mario['y'] = obj['y'];
+		// }
 	}
 
 	updateSynths(objects);
@@ -109,10 +109,16 @@ function updateSynths(objects){
 				var synth = synths[type][c_synth];
 
 				var closest = getClosest(synth, objects[type]);
-				moveSynth(synth, closest[0]);
 
-				var index = unmoved_objects.indexOf(closest[0]);
-				unmoved_objects.splice(index, 1);
+				if(closest === undefined){
+					console.log("UNDEFINED CLOSEST!");
+					console.log(synth);
+				}
+
+				// moveSynth(synth, closest[0]);
+
+				// var index = unmoved_objects.indexOf(closest[0]);
+				// unmoved_objects.splice(index, 1);
 
 			}
 
@@ -137,10 +143,16 @@ function updateSynths(objects){
 				console.log(new_object);
 
 				var closest = getClosest(new_object, synths[type]);
-				moveSynth(closest[0], new_object);
 
-				var index = old_synths.indexOf(closest[0]);
-				old_synths.splice(index, 1);
+				if(closest === undefined){
+					console.log("UNDEFINED CLOSEST IN DELETER!");
+					console.log(new_object);
+				}
+
+				// moveSynth(closest[0], new_object);
+
+				// var index = old_synths.indexOf(closest[0]);
+				// old_synths.splice(index, 1);
 
 			}
 
@@ -182,7 +194,9 @@ function getClosest(object, list){
 function createSynth(new_object){
 
 	var synthHolder = {};
-	var t = T("sin", {freq:200}).play();
+
+	var dist = distanceFromMario(new_object);
+	var t = T("sin", {freq: ((10 - dist) * 110) }).play();
 	synthHolder['synth'] = t;
 	synthHolder['x'] = new_object['x'];
 	synthHolder['y'] = new_object['y'];
@@ -214,11 +228,7 @@ function moveSynth(synthHolder, new_object){
 }
 
 function distanceFromMario(object){
-
-	console.log(mario);
-
 	var dist = Math.abs(mario['x'] - object['x']) + Math.abs(mario['y'] - object['y']);
-	console.log(dist);
 	return dist;
 
 }
