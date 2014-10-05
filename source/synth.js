@@ -218,7 +218,7 @@ function makeParams(new_object) {
     if (type === 'goomba') {
         wave = 'sin';
         var freq_from_bucket = BASE_FREQ * eval(RATIOS[Math.ceil(Math.max(8 - dist, 0))]);
-        freq = T('pulse', {add: freq_from_bucket, freq: (10-dist), mul: 20}).kr();
+        freq = T('+tri', {add: freq_from_bucket, freq: (10-dist), mul: 20}).kr();
     } else if (type === 'hole') {
         wave = 'sin';
         var freq_from_bucket = BASE_FREQ_LOW * eval(RATIOS[Math.ceil(Math.max(8 - dist, 0))]);
@@ -228,7 +228,7 @@ function makeParams(new_object) {
 
     return {wave: wave,
             freq: freq,
-            mul: 1 - (Math.abs(y - mario.y) / 8.0) - (Math.abs(x - mario.x) / 16.0),
+            mul: 1 - (Math.abs(x - mario.x) < 2 ? 0 : (Math.abs(y - mario.y) / 8.0)) - (Math.abs(x - mario.x) / 8.0),
             synth: synth};
 }
 
@@ -236,7 +236,7 @@ function createSynth(new_object){
     var synthHolder = {};
 
     var params = makeParams(new_object);
-    var t = T(params.wave, {freq: params.freq, room: 0.1, damp: 0.4, mix: 0.5, mul: params.mul},
+    var t = T(params.wave, {freq: params.freq, mul: params.mul},
               T("sin", {freq: params.freq * 1.01, mul: 0.05, phase: Math.PI * 0.25}),
               T("sin", {freq: params.freq * 2, mul: 0.25})).play();
     synthHolder['synth'] = t;
