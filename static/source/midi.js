@@ -14,6 +14,7 @@ var voices = {
     'peace_flag': 'blown_bottle',
     'star': 'blown_bottle'
 }
+var midi_started = false;
 
 function playNoteFor(type, distance, height) {
     var instrument = voices[type],
@@ -35,6 +36,7 @@ $(function() {
         soundfontUrl: SCRIPT_ROOT + "/static/soundfonts/FluidR3_GM/",
         instruments: instruments,
         callback: function() {
+            midi_started = true;
             window.MIDI = MIDI;
             MIDI.setVolume(0, 127);
 

@@ -1,4 +1,4 @@
-/*global T playNoteFor*/
+/*global T playNoteFor midi_started*/
 // Dynamic objects are represented as synthesizers.
 var synths = {
     'goomba': [],
@@ -66,7 +66,9 @@ function updateBoard(board){
             var distance = Math.abs(mario.x - obj.x);
             if ((obj.type === 'pipe' && distance < 4) ||
                 (distance === 0 || distance === 4)) {
-                playNoteFor(obj.type, distance, obj.y);
+                if (midi_started) {
+                    playNoteFor(obj.type, distance, obj.y);
+                }
             }
         }
     }
