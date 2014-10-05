@@ -1,2 +1,2 @@
 #! /bin/bash
-python -m SimpleHTTPServer 8080
+python app.py debug

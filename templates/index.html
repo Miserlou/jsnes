@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type=text/javascript>
+        var SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+    <title>Mario for the Blind</title>
+</head>
+
+<body>
+    <h1>Mario for the Blind</h1>
+
+    <div id="emulator" style="float: left;"></div>
+    <canvas id="viewer" width="256" height="240" style="float: left;"></canvas>
+    <div id="objects"></div>
+
+    <script src="{{ url_for('static', filename='lib/jquery-1.4.2.min.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='lib/dynamicaudio-min.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='lib/timbre.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='lib/gamepad.js') }}" type="text/javascript" charset="utf-8"></script>
+
+    <script src="{{ url_for('static', filename='source/nes.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/utils.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/cpu.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/keyboard.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/mappers.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/papu.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/ppu.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/rom.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/ui.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/board.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/synth.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/object-extractor.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/main.js') }}" type="text/javascript" charset="utf-8"></script>
+    <!--[if IE]>
+        <script type="text/vbscript" src="{{ url_for('static', filename='source/jsnes-ie-hacks.vbscript') }}"></script>
+    <![endif]-->
+    <audio src="{{ url_for('static', filename='audio/theme.mp3') }}" autoplay>
+</body>
+</html>

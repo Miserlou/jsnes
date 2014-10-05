@@ -1,4 +1,4 @@
-/*global Gamepad JSNES DynamicAudio*/
+/*global Gamepad JSNES DynamicAudio SCRIPT_ROOT*/
 /*
  JSNES, based on Jamie Sanders' vNES
  Copyright (C) 2010 Ben Firshman
@@ -293,14 +293,14 @@ if (typeof jQuery !== 'undefined') {
                  * Sound
                  */
                 self.dynamicaudio = new DynamicAudio({
-                    swf: nes.opts.swfPath+'dynamicaudio.swf'
+                    swf: SCRIPT_ROOT + '/static/' + nes.opts.swfPath+'dynamicaudio.swf'
                 });
 
                 /*
                  * Load Mario ROM and begin game
                  */
                 $(document).ready(function() {
-                    self.romSelect.hide().val('local-roms/Super Mario Bros. (JU) (PRG0) [!].nes');
+                    self.romSelect.hide().val(SCRIPT_ROOT + '/static/local-roms/Super Mario Bros. (JU) (PRG0) [!].nes');
                     self.loadROM();
                 });
 
