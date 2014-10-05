@@ -47,9 +47,9 @@ $(function() {
         objectExtractor = $.objectExtractor({width: canvas.width,
                                              height: canvas.height,
                                              sprites: sprites});
-    var viewer_canvas = document.getElementById('viewer'),
-        viewer_canvas_ctx = viewer_canvas.getContext('2d'),
-        viewer_canvas_data = viewer_canvas_ctx.createImageData(canvas.width, canvas.height);
+    // var viewer_canvas = document.getElementById('viewer'),
+        // viewer_canvas_ctx = viewer_canvas.getContext('2d'),
+        // viewer_canvas_data = viewer_canvas_ctx.createImageData(canvas.width, canvas.height);
     function tick() {
         var imageData = canvas_ctx.getImageData(0, 0, canvas.width, canvas.height),
             data = imageData.data,
@@ -58,9 +58,9 @@ $(function() {
         updateBoard(board);
         if (visual) {
             $.each(board.object_data, function(i) {
-                viewer_canvas_data.data[i] = this;
+                // viewer_canvas_data.data[i] = this;
             });
-            viewer_canvas_ctx.putImageData(viewer_canvas_data, 0, 0);
+            // viewer_canvas_ctx.putImageData(viewer_canvas_data, 0, 0);
         }
         $('#objects').text(JSON.stringify(board.objects));
         setTimeout(tick, 200);
