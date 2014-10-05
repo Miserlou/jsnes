@@ -236,7 +236,7 @@ function createSynth(new_object){
     var synthHolder = {};
 
     var params = makeParams(new_object);
-    var t = T(params.wave, {freq: params.freq, room: 0.1, damp: 0.4, mix: 0.5, mul: params.mul}, T("sin", {freq: params.freq, mul: 0.25}),
+    var t = T(params.wave, {freq: params.freq, room: 0.1, damp: 0.4, mix: 0.5, mul: params.mul},
               T("sin", {freq: params.freq * 1.01, mul: 0.05, phase: Math.PI * 0.25}),
               T("sin", {freq: params.freq * 2, mul: 0.25})).play();
     synthHolder['synth'] = t;
