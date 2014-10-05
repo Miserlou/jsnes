@@ -7,7 +7,7 @@
  - block_width: width of the game blocks in pixels
  - block_height: height of the game blocks in pixels
  - top_offset: how far from the top the extractor should start reading
- - objects: map of object name to known RGB values
+ - sprites: map of sprite name to known RBG, x, y positions
 
  returns:
  - GameJSON: map of row number to a list of the game objects in the row
@@ -36,13 +36,9 @@
             block_width = config.block_width,
             block_height = config.block_height,
             top_offset = config.top_offset,
+            sprites = config.sprites,
             blocks_per_row = Math.floor(width / block_width),
             blocks_per_column = Math.floor((height - top_offset) / block_height);
-
-        var sprites = {'mario': [[[188, 25, 0], 0, 0], [[188, 25, 0], 1, 0], [[188, 25, 0], 2, 0], [[188, 25, 0], 3, 0], [[188, 25, 0], 4, 0], [[188, 25, 0], 0, 1], [[188, 25, 0], 1, 1], [[188, 25, 0], 2, 1], [[188, 25, 0], 3, 1], [[188, 25, 0], 4, 1]],
-                       'goomba': [[[177, 84, 0], 0, 0], [[177, 84, 0], 1, 0], [[177, 84, 0], 2, 0], [[177, 84, 0], 3, 0], [[177, 84, 0], 4, 0], [[177, 84, 0], 5, 0], [[177, 84, 0], 6, 0], [[177, 84, 0], 7, 0], [[177, 84, 0], 8, 0], [[177, 84, 0], 9, 0], [[177, 84, 0], 10, 0], [[177, 84, 0], 11, 0], [[177, 84, 0], 12, 0], [[177, 84, 0], 13, 0], [[177, 84, 0], 14, 0], [[177, 84, 0], 15, 0], [[255, 209, 199], 5, 1], [[255, 209, 199], 6, 1], [[255, 209, 199], 7, 1], [[255, 209, 199], 8, 1], [[255, 209, 199], 9, 1], [[255, 209, 199], 10, 1]]
-
-                                 };
 
         function translateTo(position, x, y) {
             return position + 4 * ((y * width) + x)
@@ -66,8 +62,7 @@
         $.extend(self, {
             getObjects: function(data, include_object_data) {
                 // data is list of RGBA elements
-                var blocks = [],
-                    objects = [],
+                var objects = [],
                     object_data = [];
                 for (var i=0, n = data.length; i<n; i += 4) {
                     var r = data[i],
