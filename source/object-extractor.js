@@ -69,6 +69,9 @@
                         g = data[i+1],
                         b = data[i+2];
                     for (var key in sprites) {
+                        if (key === 'hole' && i < 19200) {
+                            continue;
+                        }
                         if (sprites.hasOwnProperty(key)) {
                             var object = sprites[key],
                                 object_first_pixel = object[0][0],
@@ -114,6 +117,9 @@
                                         }
                                     }
                                     if (!exists) {
+                                        if (key === 'hole' && blockPosition[1] < 16) {
+                                            continue;
+                                        }
                                         objects.push({type: key,
                                                       x: blockPosition[0],
                                                       y: blockPosition[1]})
