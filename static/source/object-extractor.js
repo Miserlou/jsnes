@@ -95,6 +95,9 @@
                                     }
                                 }
                                 if (found) {
+                                    if (key.indexOf('-') !== -1) {
+                                        key = key.substring(0, key.indexOf('-'));
+                                    }
                                     var blockPosition = getBlockFromPosition(i);
 
                                     // if (include_object_data) {

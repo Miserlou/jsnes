@@ -1,11 +1,12 @@
-/*global T*/
+/*global T playNoteFor*/
 // Dynamic objects are represented as synthesizers.
 var synths = {
     'goomba': [],
     'mushroom': [],
     'brick': [],
     'turtle': [],
-    'hole': []
+    'hole': [],
+    'chocolate_block': []
 };
 
 var started = false;
@@ -42,22 +43,31 @@ function updateBoard(board){
 
     var objects = {'goomba': [],
                    'brick': [],
-                   'hole': []};
+                   'hole': [],
+                   'mushroom': []};
 
     for(var i=0; i<length; i++){
         obj = board['objects'][i];
 
         if(obj['type'] === 'goomba' ||
-           obj['type'] === 'hole'){
+           obj['type'] === 'hole' ||
+           obj['type'] === 'mushroom') {
             //console.log("Goomba on the screen!");
             objects[obj['type']].push(obj);
         }
         if(obj['type'] === 'mario'){
-            if (!started && obj.x === 6 && obj.y === 7) {
+            if (!started && obj.x === 3 && obj.y === 13) {
                 started = true;
             }
             mario['x'] = obj['x'];
             mario['y'] = obj['y'];
+        }
+        if (obj.type === 'brick' || obj.type === 'question' || obj.type === 'pipe' || obj.type === 'chocolate_block') {
+            var distance = Math.abs(mario.x - obj.x);
+            if ((obj.type === 'pipe' && distance < 4) ||
+                (distance === 0 || distance === 4)) {
+                playNoteFor(obj.type, distance, obj.y);
+            }
         }
     }
     updateSynths(objects);
@@ -217,18 +227,25 @@ function makeParams(new_object) {
     var dist = distanceFromMario(new_object);
     if (type === 'goomba') {
         wave = 'sin';
-        var freq_from_bucket = BASE_FREQ * eval(RATIOS[Math.ceil(Math.max(8 - dist, 0))]);
+        var freq_from_bucket = BASE_FREQ * eval(RATIOS[Math.floor(Math.max(8 - dist, 0))]);
         freq = T('+tri', {add: freq_from_bucket, freq: (10-dist), mul: 20}).kr();
+        mul = 1 - (Math.abs(x - mario.x) < 2 ? 0 : (Math.abs(y - mario.y) / 10.0)) - (Math.abs(x - mario.x) / 8.0);
+    } else if (type === 'mushroom') {
+        wave = 'saw';
+        var freq_from_bucket = (BASE_FREQ - 100) * eval(RATIOS[Math.floor(Math.max(8 - dist, 0))]);
+        freq = freq_from_bucket;
+        mul = 1 - (Math.abs(x - mario.x) / 16.0);
+        console.log(freq_from_bucket, mul);
     } else if (type === 'hole') {
         wave = 'sin';
-        var freq_from_bucket = BASE_FREQ_LOW * eval(RATIOS[Math.ceil(Math.max(8 - dist, 0))]);
+        var freq_from_bucket = BASE_FREQ_LOW * eval(RATIOS[Math.floor(Math.max(8 - dist, 0))]);
         freq = freq_from_bucket;
-        mul = 0.1;
+        mul = 1 - (Math.abs(x - mario.x) < 2 ? 0 : (Math.abs(y - mario.y) / 16.0)) - (Math.abs(x - mario.x) / 16.0);
     }
 
     return {wave: wave,
             freq: freq,
-            mul: 1 - (Math.abs(x - mario.x) < 2 ? 0 : (Math.abs(y - mario.y) / 8.0)) - (Math.abs(x - mario.x) / 8.0),
+            mul: mul,
             synth: synth};
 }
 

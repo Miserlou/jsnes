@@ -10,13 +10,14 @@
     <title>Mario for the Blind</title>
 </head>
 
-<body>
-    <h1>Mario for the Blind</h1>
+<body style="background: #000; color: #FFF;">
+    <div id="things" style="display: none;">
+        <h1>Mario for the Blind</h1>
 
-    <div id="emulator" style="float: left;"></div>
-    <canvas id="viewer" width="256" height="240" style="float: left;"></canvas>
-    <div id="objects"></div>
-
+        <div id="emulator" style="float: left;"></div>
+        <canvas id="viewer" width="256" height="240" style="float: left;"></canvas>
+        <div id="objects"></div>
+    </div>
     <script src="{{ url_for('static', filename='lib/jquery.min.js') }}" type="text/javascript" charset="utf-8"></script>
 
     <!-- midi.js package -->
@@ -25,8 +26,8 @@
 	<script src="{{ url_for('static', filename='lib/MIDI/Plugin.js') }}" type="text/javascript"></script>
 	<script src="{{ url_for('static', filename='lib/MIDI/Player.js') }}" type="text/javascript"></script>
 	<script src="{{ url_for('static', filename='lib/Window/DOMLoader.XMLHttp.js') }}" type="text/javascript"></script>
-	<!-- <script src="{{ url_for('static', filename='lib/Base64.js') }}" type="text/javascript"></script> -->
-	<!-- <script src="{{ url_for('static', filename='lib/base64binary.js') }}" type="text/javascript"></script> -->
+	<script src="{{ url_for('static', filename='lib/Base64.js') }}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='lib/base64binary.js') }}" type="text/javascript"></script>
 
     <!-- JSNES package -->
     <script src="{{ url_for('static', filename='lib/dynamicaudio-min.js') }}" type="text/javascript" charset="utf-8"></script>
@@ -47,9 +48,10 @@
     <!-- Mario package -->
     <script src="{{ url_for('static', filename='source/object-extractor.js') }}" type="text/javascript" charset="utf-8"></script>
     <script src="{{ url_for('static', filename='source/main.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='source/midi.js') }}" type="text/javascript" charset="utf-8"></script>
     <!--[if IE]>
         <script type="text/vbscript" src="{{ url_for('static', filename='source/jsnes-ie-hacks.vbscript') }}"></script>
     <![endif]-->
-    <audio src="{{ url_for('static', filename='audio/theme.mp3') }}" autoplay>
+    <audio id="theme" src="{{ url_for('static', filename='audio/theme.mp3') }}">
 </body>
 </html>
