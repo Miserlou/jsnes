@@ -80,24 +80,28 @@
                         var found_type = '';
                         var lowest_score = 999;
                         $.each(config.objects, function(key) {
-                            var r = this[0],
-                                g = this[1],
-                                b = this[2];
-                            var score = Math.abs(r - r_total) + Math.abs(g - g_total) + (Math.abs(b - b_total) / 10)
-                            if (score < 15 && score < lowest_score) {
-                                lowest_score = score;
-                                found_type = key;
-                            }
+                            $.each(this, function() {
+                                var r = this[0],
+                                    g = this[1],
+                                    b = this[2];
+                                var score = Math.abs(r - r_total) * 2 + Math.abs(g - g_total) * 2 + (Math.abs(b - b_total) / 10);
+                                if (score < 30 && score < lowest_score) {
+                                    lowest_score = score;
+                                    found_type = key;
+                                }
+                            });
                         });
                         if (found_type) {
-                            if (include_object_data) {
-                                $.each(tmp_viewer_data, function(i) {
-                                    object_data[parseInt(i, 10)] = parseInt(this, 10);
-                                });
+                            if (blocks_per_column - block_number_y < 10) {
+                                if (include_object_data) {
+                                    $.each(tmp_viewer_data, function(i) {
+                                        object_data[parseInt(i, 10)] = parseInt(this, 10);
+                                    });
+                                }
+                                objects.push({type: found_type,
+                                              x: block_number_x,
+                                              y: blocks_per_column - block_number_y})
                             }
-                            objects.push({type: found_type,
-                                            x: block_number_x,
-                                            y: blocks_per_column - block_number_y})
                         }
 
                         blocks.push([r_total, g_total, b_total]);
