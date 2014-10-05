@@ -37,19 +37,14 @@
             block_height = config.block_height,
             top_offset = config.top_offset,
             blocks_per_row = Math.floor(width / block_width),
-            blocks_per_column = Math.floor((height - top_offset) / block_height),
-            viewer_canvas = document.getElementById('viewer');
-        // blocks_per_row = 2;
-        // blocks_per_column = 1;
+            blocks_per_column = Math.floor((height - top_offset) / block_height);
 
         $.extend(self, {
             getObjects: function(data) {
                 // data is list of RGBA elements
                 var blocks = [],
-                    objects = [];
-                var viewer_canvas_ctx = viewer_canvas.getContext('2d'),
-                    viewer_canvas_data = viewer_canvas_ctx.createImageData(width, height),
-                    viewer_data = viewer_canvas_data.data;
+                    objects = [],
+                    object_data = [];
                 for (var block_number_x = 0; block_number_x < blocks_per_row; block_number_x++) {
                     for (var block_number_y = 0; block_number_y < blocks_per_column; block_number_y++) {
                         var r_total = 0,
@@ -91,7 +86,7 @@
                         });
                         if (found_type) {
                             $.each(tmp_viewer_data, function(i) {
-                                viewer_data[parseInt(i, 10)] = parseInt(this, 10);
+                                object_data[parseInt(i, 10)] = parseInt(this, 10);
                             });
                             objects.push({type: found_type,
                                             x: block_number_x,
@@ -101,11 +96,10 @@
                         blocks.push([r_total, g_total, b_total]);
                     }
                 }
-                viewer_canvas_ctx.putImageData(viewer_canvas_data, 0, 0);
                 return {width: width,
                         height: height,
                         objects: objects,
-                        data: viewer_canvas_data};
+                        object_data: object_data};
             }
         });
     };
