@@ -27,8 +27,8 @@ Each of these synths is actually just:
 // Process the extracted objects.
 function updateBoard(board){
 
-	console.log("Updating board..");
-	console.log(board);
+	//console.log("Updating board..");
+	//console.log(board);
 
 	var length = board['objects'].length;
 	var obj;
@@ -41,6 +41,10 @@ function updateBoard(board){
 		if(obj['type'] === 'goomba'){
 			//console.log("Goomba on the screen!");
 			objects['goomba'].push(obj);
+		}
+		if(obj['type'] === 'mario'){
+			console.log("mario!");
+			console.log(obj);
 		}
 	}
 
