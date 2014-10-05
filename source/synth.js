@@ -6,6 +6,8 @@ var synths = {
 	'turtle': []
 };
 
+var mario = {'x': 0, 'y': 0};
+
 /*
 
 Each of these synths is actually just:
@@ -24,6 +26,9 @@ Each of these synths is actually just:
 
 // Process the extracted objects.
 function updateBoard(board){
+
+	console.log("Updating board..");
+	console.log(board);
 
 	var length = board['objects'].length;
 	var obj;
@@ -179,4 +184,12 @@ function moveSynth(synthHolder, new_object){
 	// console.log("Moving synth..")
 	// var synth = synthHolder['synth'];
 	//synth.set();
+}
+
+function distanceFromMario(object){
+
+	var dist = Math.abs(mario['x'] - object['x']) + Math.abs(mario['y'] - object['y']);
+	console.log(dist);
+	return dist;
+
 }

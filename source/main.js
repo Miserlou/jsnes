@@ -34,26 +34,34 @@ $(function() {
             ]
         })
     });
-    var objects = {'bricks': [ 136.0625, 57.46875, 18.21875 ],
-                   'chocolate_block': [ 142.875, 86, 63.875 ],
-                   'goomba': [ 141.75, 113.875, 132.4375 ],
-                   'mushroom': [ 195.25, 142.640625, 132.015625 ],
-                   'oneup': [ 154.75, 166.640625, 132.015625 ],
-                   'peace_flag': [ 122.796875, 181.046875, 202.859375 ],
-                   'question': [ 187.203125, 103.875, 36.3125 ],
-                   'star': [ 167.40625, 147.28125, 157.28125 ],
-                   'star_flag': [ 159.09375, 164.609375, 214.703125 ],
-                   'turtle': [ 104.703125, 162.921875, 154.984375 ] };
+    var objects = { 'goomba.png': [ 143.3515625, 110.85546875, 116.31640625 ],
+                    'mario.png': [ 153.5703125, 118.5390625, 83.31640625 ],
+                    'turtle.png': [ 159.9296875, 167.94140625, 123.1171875 ],
+                    'bricks.png': [ 136.0625, 57.46875, 18.21875 ],
+                    // 'chocolate_block.png': [ 142.875, 86, 63.875 ],
+                    'question.png': [ 187.203125, 103.875, 36.3125 ],
+                    'oneup.png': [ 154.75, 166.640625, 132.015625 ],
+                    'mushroom.png': [ 195.25, 142.640625, 132.015625 ],
+                    'star.png': [ 167.40625, 147.28125, 157.28125 ] };
     var canvas = $('.nes-screen')[0],
         canvas_ctx = canvas.getContext('2d'),
         objectExtractor = $.objectExtractor({width: canvas.width,
                                              height: canvas.height,
                                              objects: objects});
-    setInterval(function() {
+    var viewer_canvas = document.getElementById('viewer'),
+        viewer_canvas_ctx = viewer_canvas.getContext('2d'),
+        viewer_canvas_data = viewer_canvas_ctx.createImageData(canvas.width, canvas.height);
+    function tick() {
         var imageData = canvas_ctx.getImageData(0, 0, canvas.width, canvas.height),
             data = imageData.data;
         var board = objectExtractor.getObjects(data);
         updateBoard(board);
+        $.each(board.object_data, function(i) {
+            viewer_canvas_data.data[i] = this;
+        });
+        viewer_canvas_ctx.putImageData(viewer_canvas_data, 0, 0);
         $('#objects').text(JSON.stringify(board.objects));
-    }, 1000);
+        setTimeout(tick, 300);
+    }
+    tick();
 });
