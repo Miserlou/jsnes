@@ -1,5 +1,11 @@
 /*global JSNES updateBoard*/
 var nes;
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 $(function() {
     nes = new JSNES({
         'ui': $('#emulator').JSNESUI({
@@ -53,13 +59,16 @@ $(function() {
         viewer_canvas_data = viewer_canvas_ctx.createImageData(canvas.width, canvas.height);
     function tick() {
         var imageData = canvas_ctx.getImageData(0, 0, canvas.width, canvas.height),
-            data = imageData.data;
-        var board = objectExtractor.getObjects(data);
+            data = imageData.data,
+            visual = getParameterByName('visual');
+        var board = objectExtractor.getObjects(data, visual);
         updateBoard(board);
-        $.each(board.object_data, function(i) {
-            viewer_canvas_data.data[i] = this;
-        });
-        viewer_canvas_ctx.putImageData(viewer_canvas_data, 0, 0);
+        if (visual) {
+            $.each(board.object_data, function(i) {
+                viewer_canvas_data.data[i] = this;
+            });
+            viewer_canvas_ctx.putImageData(viewer_canvas_data, 0, 0);
+        }
         $('#objects').text(JSON.stringify(board.objects));
         setTimeout(tick, 300);
     }

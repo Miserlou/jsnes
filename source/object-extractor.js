@@ -40,7 +40,7 @@
             blocks_per_column = Math.floor((height - top_offset) / block_height);
 
         $.extend(self, {
-            getObjects: function(data) {
+            getObjects: function(data, include_object_data) {
                 // data is list of RGBA elements
                 var blocks = [],
                     objects = [],
@@ -59,10 +59,12 @@
                                 var r = data[ctx_offset],
                                     g = data[ctx_offset+1],
                                     b = data[ctx_offset+2];
-                                tmp_viewer_data[ctx_offset] = r;
-                                tmp_viewer_data[ctx_offset + 1] = g;
-                                tmp_viewer_data[ctx_offset + 2] = b;
-                                tmp_viewer_data[ctx_offset + 3] = 0xFF;
+                                if (include_object_data) {
+                                    tmp_viewer_data[ctx_offset] = r;
+                                    tmp_viewer_data[ctx_offset + 1] = g;
+                                    tmp_viewer_data[ctx_offset + 2] = b;
+                                    tmp_viewer_data[ctx_offset + 3] = 0xFF;
+                                }
                                 // viewer_data[ctx_offset] = r;
                                 // viewer_data[ctx_offset + 1] = g;
                                 // viewer_data[ctx_offset + 2] = b;
@@ -88,9 +90,11 @@
                             }
                         });
                         if (found_type) {
-                            $.each(tmp_viewer_data, function(i) {
-                                object_data[parseInt(i, 10)] = parseInt(this, 10);
-                            });
+                            if (include_object_data) {
+                                $.each(tmp_viewer_data, function(i) {
+                                    object_data[parseInt(i, 10)] = parseInt(this, 10);
+                                });
+                            }
                             objects.push({type: found_type,
                                             x: block_number_x,
                                             y: blocks_per_column - block_number_y})
@@ -99,10 +103,14 @@
                         blocks.push([r_total, g_total, b_total]);
                     }
                 }
-                return {width: width,
-                        height: height,
-                        objects: objects,
-                        object_data: object_data};
+                var return_data = {width: width,
+                                   height: height,
+                                   objects: objects};
+                if (include_object_data) {
+                    return_data['object_data'] = object_data;
+                }
+                return return_data;
+
             }
         });
     };
