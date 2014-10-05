@@ -76,11 +76,14 @@
                         g_total /= total;
                         b_total /= total;
                         var found_type = '';
+                        var lowest_score = 999;
                         $.each(config.objects, function(key) {
                             var r = this[0],
                                 g = this[1],
                                 b = this[2];
-                            if (Math.abs(r - r_total) + Math.abs(g - g_total) + (Math.abs(b - b_total) / 10) < 15) {
+                            var score = Math.abs(r - r_total) + Math.abs(g - g_total) + (Math.abs(b - b_total) / 10)
+                            if (score < 15 && score < lowest_score) {
+                                lowest_score = score;
                                 found_type = key;
                             }
                         });
