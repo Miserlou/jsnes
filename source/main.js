@@ -55,5 +55,5 @@ $(function() {
         var board = objectExtractor.getObjects(data);
         updateBoard(board);
         $('#objects').text(JSON.stringify(board.objects));
-    }, 300);
+    }, 1000);
 });

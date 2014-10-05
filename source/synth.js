@@ -34,7 +34,7 @@ function updateBoard(board){
 		obj = board['objects'][i];
 
 		if(obj['type'] === 'goomba'){
-			console.log("Goomba on the screen!");
+			//console.log("Goomba on the screen!");
 			objects['goomba'].push(obj);
 		}
 	}
@@ -78,9 +78,6 @@ function updateSynths(objects){
 			old_synths_length = 0;
 		};
 		var new_synths_length = objects[type].length;
-
-		console.log("Old Synths: " + old_synths_length);
-		console.log("New Synths: " + new_synths_length);
 
 		// Move the existing synths
 		if(new_synths_length == old_synths_length){
@@ -156,24 +153,23 @@ function getClosest(object, list){
 }
 
 function createSynth(new_object){
-	console.log("Creating synth..")
+
 	var synthHolder = {};
-	var t = T("sin", {freq:880}).play();
+	var t = T("sin", {freq:200}).play();
 	synthHolder['synth'] = t;
 	synthHolder['x'] = new_object['x'];
 	synthHolder['y'] = new_object['y'];
-
-	console.log(new_object);
 
 	synths[new_object['type']].push(synthHolder);
 }
 
 function deleteSynth(synthHolder, type){
-	console.log("Deleting synth..")
-	console.log(synthHolder);
+	// console.log("Deleting synth..")
+	// console.log(synthHolder);
 
 	var synth = synthHolder['synth'];
 	synth.pause();
+	//synth.reset();
 
 	var index = synths[type].indexOf(synthHolder);
 	synths[type].splice(index, 1);
