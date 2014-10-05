@@ -17,11 +17,21 @@
     <canvas id="viewer" width="256" height="240" style="float: left;"></canvas>
     <div id="objects"></div>
 
-    <script src="{{ url_for('static', filename='lib/jquery-1.4.2.min.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='lib/jquery.min.js') }}" type="text/javascript" charset="utf-8"></script>
+
+    <!-- midi.js package -->
+	<script src="{{ url_for('static', filename='lib/MIDI/AudioDetect.js') }}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='lib/MIDI/LoadPlugin.js') }}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='lib/MIDI/Plugin.js') }}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='lib/MIDI/Player.js') }}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='lib/Window/DOMLoader.XMLHttp.js') }}" type="text/javascript"></script>
+	<!-- <script src="{{ url_for('static', filename='lib/Base64.js') }}" type="text/javascript"></script> -->
+	<!-- <script src="{{ url_for('static', filename='lib/base64binary.js') }}" type="text/javascript"></script> -->
+
+    <!-- JSNES package -->
     <script src="{{ url_for('static', filename='lib/dynamicaudio-min.js') }}" type="text/javascript" charset="utf-8"></script>
     <script src="{{ url_for('static', filename='lib/timbre.js') }}" type="text/javascript" charset="utf-8"></script>
     <script src="{{ url_for('static', filename='lib/gamepad.js') }}" type="text/javascript" charset="utf-8"></script>
-
     <script src="{{ url_for('static', filename='source/nes.js') }}" type="text/javascript" charset="utf-8"></script>
     <script src="{{ url_for('static', filename='source/utils.js') }}" type="text/javascript" charset="utf-8"></script>
     <script src="{{ url_for('static', filename='source/cpu.js') }}" type="text/javascript" charset="utf-8"></script>
@@ -33,6 +43,8 @@
     <script src="{{ url_for('static', filename='source/ui.js') }}" type="text/javascript" charset="utf-8"></script>
     <script src="{{ url_for('static', filename='source/board.js') }}" type="text/javascript" charset="utf-8"></script>
     <script src="{{ url_for('static', filename='source/synth.js') }}" type="text/javascript" charset="utf-8"></script>
+
+    <!-- Mario package -->
     <script src="{{ url_for('static', filename='source/object-extractor.js') }}" type="text/javascript" charset="utf-8"></script>
     <script src="{{ url_for('static', filename='source/main.js') }}" type="text/javascript" charset="utf-8"></script>
     <!--[if IE]>

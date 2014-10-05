@@ -1,4 +1,4 @@
-/*global JSNES updateBoard SCRIPT_ROOT*/
+/*global JSNES updateBoard SCRIPT_ROOT MIDI*/
 var nes;
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -7,6 +7,21 @@ function getParameterByName(name) {
     return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 $(function() {
+    MIDI.loadPlugin({
+        soundfontUrl: SCRIPT_ROOT + "/static/fonts/FluidR3_GM/",
+        instruments: ["acoustic_grand_piano"],
+        callback: function() {
+
+            $('#loading').hide();
+
+            window.MIDI = MIDI;
+            MIDI.setVolume(0, 127);
+            MIDI.noteOn(0, 60, 127);
+            MIDI.noteOn(0, 60, 127);
+
+        }
+    });
+
     nes = new JSNES({
         'ui': $('#emulator').JSNESUI({
             'Working': [
