@@ -35,9 +35,6 @@ Each of these synths is actually just:
 // Process the extracted objects.
 function updateBoard(board){
 
-    //console.log("Updating board..");
-    //console.log(board);
-
     var length = board['objects'].length;
     var obj;
 
@@ -137,11 +134,6 @@ function updateSynths(objects){
 
                 var closest = getClosest(synth, objects[type]);
 
-                if(closest === undefined){
-                    console.log("UNDEFINED CLOSEST!");
-                    console.log(synth);
-                }
-
                 // moveSynth(synth, closest[0]);
 
                 // var index = unmoved_objects.indexOf(closest[0]);
@@ -161,20 +153,9 @@ function updateSynths(objects){
             var old_synths = synths[type];
             var new_objects = objects[type];
 
-            console.log("new objects");
-            console.log(new_objects);
-
             for(var new_object in new_objects){
 
-                console.log("new object");
-                console.log(new_object);
-
                 var closest = getClosest(new_object, synths[type]);
-
-                if(closest === undefined){
-                    console.log("UNDEFINED CLOSEST IN DELETER!");
-                    console.log(new_object);
-                }
 
                 // moveSynth(closest[0], new_object);
 
@@ -202,7 +183,6 @@ function getClosest(object, list){
     for (var x in list) {
 
         i = list[x];
-        console.log(i);
 
         t_dist = Math.sqrt(Math.pow(object.x - i.x, 2) + Math.pow(object.y - i.y, 2));
         if (t_dist < dist){
@@ -210,9 +190,6 @@ function getClosest(object, list){
             dist = t_dist;
         }
     }
-
-    console.log("Closest is..");
-    console.log(closest);
 
     return [closest, dist];
 
@@ -237,7 +214,6 @@ function makeParams(new_object) {
         var freq_from_bucket = (BASE_FREQ - 100) * eval(RATIOS[Math.floor(Math.max(8 - dist, 0))]);
         freq = freq_from_bucket;
         mul = 1 - (Math.abs(x - mario.x) / 16.0);
-        console.log(freq_from_bucket, mul);
     } else if (type === 'hole') {
         wave = 'sin';
         var freq_from_bucket = BASE_FREQ_LOW * eval(RATIOS[Math.floor(Math.max(8 - dist, 0))]);
@@ -266,9 +242,6 @@ function createSynth(new_object){
 }
 
 function deleteSynth(synthHolder, type){
-    // console.log("Deleting synth..")
-    // console.log(synthHolder);
-
     var synth = synthHolder['synth'];
     synth.pause();
     //synth.reset();
@@ -278,7 +251,6 @@ function deleteSynth(synthHolder, type){
 }
 
 function moveSynth(synthHolder, new_object){
-    console.log("Moving synth..")
     var t = synthHolder['synth'];
     var params = makeParams(new_object);
     t.set({freq: params.freq, mul: params.mul });
